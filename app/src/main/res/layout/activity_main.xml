@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_translate_screen"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/ll_converter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:gravity="center">
+
+        <TextView
+            android:hint=""
+            android:id="@+id/tv_output"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/paddingNormal"
+            android:textIsSelectable="true"/>
+
+        <LinearLayout
+            android:id="@+id/currencies_panel"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/sp_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                android:layout_weight="0.5"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/ib_swap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/swap"
+                android:background="@null"
+                android:layout_weight="0.5"
+                android:src="@mipmap/ic_swap_horiz_black_24dp"/>
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/sp_output"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"
+                android:layout_weight="0.5"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="text"
+            android:padding="@dimen/paddingNormal"
+            android:scrollbars="vertical"/>
+
+        <ImageButton
+            android:id="@+id/ib_convert"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/swap"
+            android:background="@null"
+            android:src="@mipmap/ic_swap_horiz_black_24dp"/>
+
+    </LinearLayout>
+</RelativeLayout>
