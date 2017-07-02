@@ -1,12 +1,21 @@
 package com.shashov.currency.mvp.views;
 
+import android.support.annotation.NonNull;
 import com.shashov.currency.common.Currency;
-import com.shashov.currency.common.MainViewInputData;
+import com.shashov.currency.mvp.common.MainViewInputData;
 
 import java.util.List;
 
 public interface MainView extends View{
-    void showResult(String result);
-    void showInputData(MainViewInputData inputData);
-    void populateCurrencies(List<Currency> currencies);
+    void showResult(@NonNull String result);
+
+    void showInputData(@NonNull MainViewInputData inputData);
+
+    void populateCurrencies(@NonNull List<Currency> currencies);
+
+    void showLoadingScreen();
+
+    void swapCurrencies();
+
+    void showError();
 }

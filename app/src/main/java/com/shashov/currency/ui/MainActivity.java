@@ -1,13 +1,15 @@
 package com.shashov.currency.ui;
 
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 import com.shashov.currency.common.Currency;
-import com.shashov.currency.currencyconverter.R;
+import com.shashov.currency.currency.R;
 import com.shashov.currency.mvp.PresenterManager;
-import com.shashov.currency.common.MainViewInputData;
+import com.shashov.currency.mvp.common.MainViewInputData;
 import com.shashov.currency.mvp.presenters.BasePresenter;
 import com.shashov.currency.mvp.presenters.MainPresenter;
 import com.shashov.currency.mvp.views.MainView;
@@ -15,13 +17,10 @@ import com.shashov.currency.mvp.views.MainView;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MainView {
-    private LinearLayout llConverter;
     private EditText etInput;
     private Spinner spInput;
     private Spinner spOutput;
     private TextView tvOutput;
-    private ImageButton ibSwap;
-    private ImageButton ibConvert;
     private MainPresenter presenter;
 
     @Override
@@ -33,9 +32,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         spInput = (Spinner) findViewById(R.id.sp_input);
         spOutput = (Spinner) findViewById(R.id.sp_output);
         tvOutput = (TextView) findViewById(R.id.tv_output);
-        llConverter = (LinearLayout) findViewById(R.id.ll_converter);
-        ibSwap = (ImageButton) findViewById(R.id.ib_swap);
-        ibConvert = (ImageButton) findViewById(R.id.ib_convert);
+        ImageButton ibSwap = (ImageButton) findViewById(R.id.ib_swap);
+        Button ibConvert = (Button) findViewById(R.id.btn_convert);
 
         presenter = (MainPresenter) PresenterManager.getInstance().getPresenter(this);
 
@@ -45,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 presenter.onClickConvert(etInput.getText().toString().trim(), spInput.getSelectedItemPosition(), spOutput.getSelectedItemPosition());
             }
         });
-
         ibSwap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,19 +58,19 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void showResult(String result) {
+    public void showResult(@NonNull String result) {
         tvOutput.setText(result);
     }
 
     @Override
-    public void showInputData(MainViewInputData inputData) {
+    public void showInputData(@NonNull MainViewInputData inputData) {
         etInput.setText(inputData.getInput());
         spOutput.setSelection(inputData.getOutputCurrencyIndex());
         spInput.setSelection(inputData.getInputCurrencyIndex());
     }
 
     @Override
-    public void populateCurrencies(List<Currency> currencies) {
+    public void populateCurrencies(@NonNull List<Currency> currencies) {
         spInput.setAdapter(new CurrencySpinnerAdapter(this));
         spOutput.setAdapter(new CurrencySpinnerAdapter(this));
         ((CurrencySpinnerAdapter) spInput.getAdapter()).addItems(currencies);
@@ -81,14 +78,36 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public void showLoadingScreen() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(MainActivity.this, LoadingActivity.class));
+            }
+        });
+    }
+
+    @Override
+    public void swapCurrencies() {
+        int r = spInput.getSelectedItemPosition();
+        spInput.setSelection(spOutput.getSelectedItemPosition());
+        spOutput.setSelection(r);
+    }
+
+    @Override
+    public void showError() {
+        showResult(getString(R.string.InvalidResult));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         presenter.bindView(this);
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onStop() {
+        super.onStop();
         presenter.unbindView();
     }
 }

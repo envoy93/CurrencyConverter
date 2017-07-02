@@ -1,5 +1,6 @@
 package com.shashov.currency.mvp.presenters;
 
+import android.support.annotation.NonNull;
 import com.shashov.currency.mvp.views.View;
 
 import java.lang.ref.WeakReference;
@@ -7,7 +8,7 @@ import java.lang.ref.WeakReference;
 public abstract class BasePresenter<V extends View> {
     private WeakReference<V> view;
 
-    public void bindView(V view) {
+    public void bindView(@NonNull V view) {
         this.view = new WeakReference<>(view);
         onViewAttached(this.view.get());
     }
@@ -24,5 +25,5 @@ public abstract class BasePresenter<V extends View> {
         }
     }
 
-    protected abstract void onViewAttached(V view);
+    protected abstract void onViewAttached(@NonNull V view);
 }

@@ -1,12 +1,21 @@
 package com.shashov.currency.mvp.models;
 
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import com.shashov.currency.CurrencyConverterApp;
 import com.shashov.currency.common.Currency;
-import com.shashov.currency.common.MainViewInputData;
+import com.shashov.currency.common.CurrenciesXmlParser;
+import com.shashov.currency.mvp.common.MainViewInputData;
+import com.shashov.currency.common.NetworkCall;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CurrencyModel {
+    private static final String API_URL = "http://www.cbr.ru/scripts/XML_daily.asp";
+    private static final String CURRENCIES_XML_KEY = "CURRENCIES_XML_KEY";
     private static CurrencyModel instance;
     private List<Currency> currencies;
 
@@ -18,36 +27,95 @@ public class CurrencyModel {
         return instance;
     }
 
-    public void loadCurrencies(OnCurrenciesLoadedListener listener, boolean isUseCache) {
-        //TODO load
-        currencies.clear();
-        currencies.add(new Currency("","$", 1 ,"dollar", 1.0));
-        currencies.add(new Currency("","r", 1 ,"rub", 1.0));
-        listener.onSuccess(currencies);
+    public void loadCurrencies(@NonNull final OnCurrenciesLoadedListener listener) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                currencies.clear();
+                String xml;
+
+                if (!CurrencyConverterApp.isNetworkConnected()) {
+                    //load without internet connection
+                    xml = loadXmlFromCache();
+                } else {
+                    try {
+                        //load from internet
+                        xml = NetworkCall.downloadUrl(new URL(API_URL));
+                    } catch (IOException e) {
+                        xml = loadXmlFromCache();
+                    }
+                }
+
+                //try to parse and add currencies
+                try {
+                    currencies.addAll(CurrenciesXmlParser.parseCurrencies(xml));
+                } catch (Exception e) {
+                    // do nothing
+                }
+
+                if (currencies.isEmpty()) {
+                    listener.onError();
+                } else {
+                    saveXmlToCache(xml);
+                    listener.onSuccess(currencies);
+                }
+            }
+        }).start();
     }
 
-    public void getCurrencies(OnCurrenciesLoadedListener listener) {
+    private void saveXmlToCache(String xml) {
+        PreferenceManager
+                .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
+                .edit()
+                .putString(CURRENCIES_XML_KEY, xml)
+                .apply();
+    }
+
+    private String loadXmlFromCache() {
+        return PreferenceManager
+                .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
+                .getString(CURRENCIES_XML_KEY, "");
+    }
+
+    public void getCurrencies(@NonNull OnCurrenciesLoadedListener listener) {
         if ((currencies != null) && !currencies.isEmpty()) {
             listener.onSuccess(currencies);
         } else {
-            listener.onError("");
+            listener.onError();
         }
     }
 
-    public void convertCurrency(OnConvertedListener listener, MainViewInputData inputData) {
-        //TODO convert
-        listener.onSuccess(inputData.getInput() + inputData.getInputCurrencyIndex()+inputData.getOutputCurrencyIndex());
+    public void convertCurrency(@NonNull OnConvertedListener listener, @NonNull MainViewInputData inputData) {
+        if (inputData.getInputCurrencyIndex() >= currencies.size() || (inputData.getOutputCurrencyIndex() >= currencies.size())) {
+            listener.onError();
+            return;
+        }
+
+        double result;
+        try {
+            result = Double.parseDouble(inputData.getInput());
+        } catch (Exception e) {
+            listener.onError();
+            return;
+        }
+
+        Currency from = currencies.get(inputData.getInputCurrencyIndex());
+        Currency to = currencies.get(inputData.getOutputCurrencyIndex());
+        result = result * (from.getValue() / from.getNominal()) / (to.getValue() / to.getNominal());
+
+        listener.onSuccess(String.format((result == (long) result) ? "%s" : "%.3f", result));
     }
 
     public interface OnConvertedListener {
-        void onSuccess(String result);
+        void onSuccess(@NonNull String result);
 
-        void onError(String error);
+        void onError();
     }
 
     public interface OnCurrenciesLoadedListener {
-        void onSuccess(List<Currency> currencies);
+        void onSuccess(@NonNull List<Currency> currencies);
 
-        void onError(String error);
+        void onError();
     }
 }

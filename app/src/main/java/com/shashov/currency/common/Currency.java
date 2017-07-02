@@ -1,16 +1,25 @@
 package com.shashov.currency.common;
 
+import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Root;
+
+@Root(name = "Valute", strict = false)
 public class Currency {
+    @Element(name = "NumCode")
     private String numCode;
+    @Element(name = "CharCode")
     private String CharCode;
+    @Element(name = "Nominal")
     private int nominal;
+    @Element(name = "Name")
     private String name;
-    private double value;
+    @Element(name = "Value")
+    private String value;
 
     public Currency() {
     }
 
-    public Currency(String numCode, String charCode, int nominal, String name, double value) {
+    public Currency(String numCode, String charCode, int nominal, String name, String value) {
         this.numCode = numCode;
         CharCode = charCode;
         this.nominal = nominal;
@@ -51,10 +60,10 @@ public class Currency {
     }
 
     public double getValue() {
-        return value;
+        return Double.parseDouble(value.replace(",", "."));
     }
 
-    public void setValue(double value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }

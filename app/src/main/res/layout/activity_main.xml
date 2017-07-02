@@ -3,77 +3,95 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_translate_screen"
     android:layout_width="match_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    android:padding="@dimen/paddingNormal">
 
     <LinearLayout
-        android:id="@+id/ll_converter"
+        android:id="@+id/spinners"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/paddingNormal"
+        android:layout_marginBottom="@dimen/paddingNormal"
+        android:gravity="center">
+
+        <Spinner
+            android:id="@+id/sp_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:layout_weight="0.5"
+            android:gravity="center"/>
+
+        <ImageButton
+            android:id="@+id/ib_swap"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@string/swap"
+            android:background="@null"
+            android:layout_weight="0.5"
+            android:src="@mipmap/ic_swap_horiz_black_24dp"/>
+
+        <Spinner
+            android:id="@+id/sp_output"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            android:layout_weight="0.5"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/spinners"
+        android:layout_above="@+id/input"
         android:gravity="center">
 
         <TextView
             android:hint=""
             android:id="@+id/tv_output"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="@dimen/paddingNormal"
+            android:textSize="@dimen/baseTextSizeBig"
             android:textIsSelectable="true"/>
 
-        <LinearLayout
-            android:id="@+id/currencies_panel"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
+    </LinearLayout>
 
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/sp_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:layout_weight="0.5"
-                android:gravity="center"/>
+    <LinearLayout
+        android:id="@+id/input"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/paddingBig">
 
-            <ImageButton
-                android:id="@+id/ib_swap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:contentDescription="@string/swap"
-                android:background="@null"
-                android:layout_weight="0.5"
-                android:src="@mipmap/ic_swap_horiz_black_24dp"/>
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/sp_output"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dialog"
-                android:layout_weight="0.5"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/et_input"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="text"
-            android:padding="@dimen/paddingNormal"
-            android:scrollbars="vertical"/>
-
-        <ImageButton
-            android:id="@+id/ib_convert"
-            android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/btn_convert"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:contentDescription="@string/swap"
-            android:background="@null"
-            android:src="@mipmap/ic_swap_horiz_black_24dp"/>
+            android:text="@string/convert"
+            android:textAllCaps="true"/>
 
+        <EditText
+            android:id="@+id/et_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:scrollHorizontally="false"
+            android:inputType="numberDecimal"
+            android:padding="@dimen/paddingNormal"
+            android:textSize="@dimen/inputTextSize"
+            android:scrollbars="vertical"/>
     </LinearLayout>
+
+
 </RelativeLayout>

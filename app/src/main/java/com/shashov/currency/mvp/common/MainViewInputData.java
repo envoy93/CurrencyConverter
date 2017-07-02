@@ -1,12 +1,11 @@
-package com.shashov.currency.common;
+package com.shashov.currency.mvp.common;
 
-public class MainViewInputData {
+import java.io.Serializable;
+
+public class MainViewInputData implements Serializable {
     private int inputCurrencyIndex;
     private int outputCurrencyIndex;
     private String input;
-
-    public MainViewInputData() {
-    }
 
     public MainViewInputData(MainViewInputData data) {
         input = data.input;

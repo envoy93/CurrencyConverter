@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import com.shashov.currency.currencyconverter.R;
+import com.shashov.currency.currency.R;
 import com.shashov.currency.mvp.PresenterManager;
 import com.shashov.currency.mvp.presenters.BasePresenter;
 import com.shashov.currency.mvp.presenters.LoadingPresenter;
@@ -15,7 +15,6 @@ import com.shashov.currency.mvp.views.LoadingView;
 public class LoadingActivity extends AppCompatActivity implements LoadingView {
     private LinearLayout llNoData;
     private LinearLayout llLoading;
-    private Button ibReload;
     private LoadingPresenter presenter;
 
     @Override
@@ -24,26 +23,47 @@ public class LoadingActivity extends AppCompatActivity implements LoadingView {
         setContentView(R.layout.activity_loading);
         llNoData = (LinearLayout) findViewById(R.id.ll_no_data);
         llLoading = (LinearLayout) findViewById(R.id.ll_loading);
-        ibReload = (Button) findViewById(R.id.btn_reload);
+        Button ibReload = (Button) findViewById(R.id.btn_reload);
 
         presenter = (LoadingPresenter) PresenterManager.getInstance().getPresenter(this);
+        ibReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.onReloadClick();
+            }
+        });
     }
 
     @Override
     public void showLoading() {
-        llLoading.setVisibility(View.VISIBLE);
-        llNoData.setVisibility(View.INVISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                llLoading.setVisibility(View.VISIBLE);
+                llNoData.setVisibility(View.INVISIBLE);
+            }
+        });
     }
 
     @Override
     public void showApp() {
-        startActivity(new Intent(this, MainActivity.class));
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(LoadingActivity.this, MainActivity.class));
+            }
+        });
     }
 
     @Override
     public void showError() {
-        llLoading.setVisibility(View.INVISIBLE);
-        llNoData.setVisibility(View.VISIBLE);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                llLoading.setVisibility(View.INVISIBLE);
+                llNoData.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
     @Override

@@ -3,8 +3,5 @@
           android:id="@+id/standard_spinner_format"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:lines="1"
-          android:ellipsize="end"
           android:textSize="@dimen/baseTextSize"
-          android:padding="@dimen/paddingNormal"
-          android:scrollHorizontally="true"/>
+          android:padding="@dimen/paddingNormal"/>

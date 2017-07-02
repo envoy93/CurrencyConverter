@@ -8,26 +8,21 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import com.shashov.currency.common.Currency;
-import com.shashov.currency.currencyconverter.R;
+import com.shashov.currency.currency.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by envoy on 01.07.2017.
- */
 public class CurrencySpinnerAdapter  extends ArrayAdapter<String> {
-    private List<Currency> langs = new ArrayList<>();
 
     public CurrencySpinnerAdapter(@NonNull Context context) {
         super(context, R.layout.currency_spinner_item);
     }
 
     public void addItems(@NonNull List<Currency> items) {
-        langs.addAll(items);
         String[] currencies = new String[items.size()];
         for (int i = 0; i < items.size(); i++) {
-            currencies[i] = items.get(i).getName();
+            currencies[i] = items.get(i).getCharCode().toUpperCase();
         }
 
         addAll(currencies);
@@ -43,12 +38,7 @@ public class CurrencySpinnerAdapter  extends ArrayAdapter<String> {
         }
 
         TextView textView = (TextView) view.findViewById(R.id.standard_spinner_format);
-        textView.setText(langs.get(position).getCharCode().toUpperCase());
+        textView.setText(getItem(position));
         return view;
-    }
-
-    @Override
-    public String getItem(int position) {
-        return langs.get(position).getName();
     }
 }

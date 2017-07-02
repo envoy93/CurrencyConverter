@@ -1,5 +1,6 @@
 package com.shashov.currency.mvp.presenters;
 
+import android.support.annotation.NonNull;
 import com.shashov.currency.common.Currency;
 import com.shashov.currency.mvp.models.CurrencyModel;
 import com.shashov.currency.mvp.views.LoadingView;
@@ -10,7 +11,7 @@ public class LoadingPresenter extends BasePresenter<LoadingView> {
     private State state = State.LOADING;
 
     @Override
-    protected void onViewAttached(LoadingView view) {
+    protected void onViewAttached(@NonNull LoadingView view) {
         if (state == State.LOADING) {
             loadData();
         } else {
@@ -27,7 +28,7 @@ public class LoadingPresenter extends BasePresenter<LoadingView> {
         getView().showLoading();
         CurrencyModel.getInstance().loadCurrencies(new CurrencyModel.OnCurrenciesLoadedListener() {
             @Override
-            public void onSuccess(List<Currency> currencies) {
+            public void onSuccess(@NonNull List<Currency> currencies) {
                 if (getView() != null) {
                     state = State.LOADING;
                     getView().showApp();
@@ -35,13 +36,13 @@ public class LoadingPresenter extends BasePresenter<LoadingView> {
             }
 
             @Override
-            public void onError(String error) {
+            public void onError() {
                 if (getView() != null) {
                     state = State.ERROR;
                     getView().showError();
                 }
             }
-        }, false);
+        });
     }
 
     private enum State {
