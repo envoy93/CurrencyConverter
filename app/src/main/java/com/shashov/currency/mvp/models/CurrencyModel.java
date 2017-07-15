@@ -1,5 +1,6 @@
 package com.shashov.currency.mvp.models;
 
+import android.annotation.SuppressLint;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import com.shashov.currency.CurrencyConverterApp;
@@ -86,6 +87,7 @@ public class CurrencyModel {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     public void convertCurrency(@NonNull OnConvertedListener listener, @NonNull MainViewInputData inputData) {
         if (inputData.getInputCurrencyIndex() >= currencies.size() || (inputData.getOutputCurrencyIndex() >= currencies.size())) {
             listener.onError();
@@ -102,13 +104,29 @@ public class CurrencyModel {
 
         Currency from = currencies.get(inputData.getInputCurrencyIndex());
         Currency to = currencies.get(inputData.getOutputCurrencyIndex());
-        result = result * (from.getValue() / from.getNominal()) / (to.getValue() / to.getNominal());
+        double k1 = (from.getValue() / from.getNominal()) / (to.getValue() / to.getNominal());
+        double k2 = (to.getValue() / to.getNominal()) / (from.getValue() / from.getNominal());
+        result = result * k1;
 
-        listener.onSuccess(String.format((result == (long) result) ? "%s" : "%.3f", result));
+        listener.onSuccess(format(result), getCaptionForCurrency(from, to, format(k1)), getCaptionForCurrency(to, from, format(k2)));
+    }
+
+    private String format(double number) {
+        return String.format((number == (long) number) ? "%s" : "%.3f", number);
+    }
+
+    private String getCaptionForCurrency(Currency left, Currency right, String value) {
+        return new StringBuilder("1 ")
+                .append(left.getCharCode())
+                .append(" = ")
+                .append(value)
+                .append(" ")
+                .append(right.getCharCode())
+                .toString();
     }
 
     public interface OnConvertedListener {
-        void onSuccess(@NonNull String result);
+        void onSuccess(@NonNull String result, @NonNull String caption1, @NonNull String caption2);
 
         void onError();
     }

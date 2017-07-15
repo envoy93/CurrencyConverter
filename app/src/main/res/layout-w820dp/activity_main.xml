@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_translate_screen"
+    android:layout_width="match_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:padding="@dimen/paddingNormal"
+    android:background="@color/appBG">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.5"
+        android:background="@color/white"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/inputPanel">
+
+            <EditText
+                android:id="@+id/et_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:scrollHorizontally="false"
+                android:inputType="numberDecimal"
+                android:padding="@dimen/paddingNormal"
+                android:hint="@string/input"
+                android:textSize="@dimen/inputTextSize"
+                android:backgroundTint="@color/input"
+                android:textColorHint="@color/input"
+                android:textColor="@color/input"
+                android:scrollbars="vertical"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/controls"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/controlsPanel"
+            android:layout_margin="@dimen/paddingNormal"
+            android:padding="@dimen/paddingNormal">
+
+            <LinearLayout
+                android:id="@+id/spinners"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <Spinner
+                    android:id="@+id/sp_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:layout_weight="0.5"
+                    android:gravity="center"/>
+
+                <ImageButton
+                    android:id="@+id/ib_swap"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/swap"
+                    android:background="@null"
+                    android:layout_weight="0.5"
+                    android:src="@mipmap/ic_swap_horiz_black_24dp"/>
+
+                <Spinner
+                    android:id="@+id/sp_output"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    android:layout_weight="0.5"
+                    android:gravity="center"/>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_convert"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="@string/swap"
+                android:text="@string/convert"
+                style="?android:attr/borderlessButtonStyle"
+                android:textSize="@dimen/baseTextSize"
+                android:textAllCaps="true"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_weight="0.5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/paddingNormal"
+        android:layout_marginLeft="@dimen/paddingNormal">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/paddingNormal"
+            android:background="@color/outputPanel"
+            android:gravity="center">
+
+            <TextView
+                android:hint=""
+                android:id="@+id/tv_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/convert"
+                android:textSize="@dimen/baseTextSizeBig"
+                android:layout_gravity="center"
+                android:textIsSelectable="true"/>
+
+            <TextView
+                android:id="@+id/tv_result_caption1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/caption"
+                android:textSize="@dimen/baseTextSizeSmall"
+                android:layout_gravity="end"/>
+
+            <TextView
+                android:id="@+id/tv_result_caption2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/caption"
+                android:textSize="@dimen/baseTextSizeSmall"
+                android:layout_gravity="end"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

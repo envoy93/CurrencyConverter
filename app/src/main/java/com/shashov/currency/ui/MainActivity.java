@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private EditText etInput;
     private Spinner spInput;
     private Spinner spOutput;
+    private TextView tvResultCaption1;
+    private TextView tvResultCaption2;
     private TextView tvOutput;
     private MainPresenter presenter;
 
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
         spInput = (Spinner) findViewById(R.id.sp_input);
         spOutput = (Spinner) findViewById(R.id.sp_output);
         tvOutput = (TextView) findViewById(R.id.tv_output);
+        tvResultCaption1 = (TextView) findViewById(R.id.tv_result_caption1);
+        tvResultCaption2 = (TextView) findViewById(R.id.tv_result_caption2);
         ImageButton ibSwap = (ImageButton) findViewById(R.id.ib_swap);
         Button ibConvert = (Button) findViewById(R.id.btn_convert);
 
@@ -58,8 +62,12 @@ public class MainActivity extends AppCompatActivity implements MainView {
     }
 
     @Override
-    public void showResult(@NonNull String result) {
+    public void showResult(@NonNull String result, @NonNull String caption1, @NonNull String caption2) {
         tvOutput.setText(result);
+        tvResultCaption1.setVisibility(caption1.isEmpty() ? View.GONE : View.VISIBLE);
+        tvResultCaption2.setVisibility(caption2.isEmpty() ? View.GONE : View.VISIBLE);
+        tvResultCaption1.setText(caption1);
+        tvResultCaption2.setText(caption2);
     }
 
     @Override
@@ -96,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void showError() {
-        showResult(getString(R.string.InvalidResult));
+        showResult(getString(R.string.InvalidResult), "", "");
     }
 
     @Override

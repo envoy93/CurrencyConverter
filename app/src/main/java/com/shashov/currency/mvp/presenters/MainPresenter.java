@@ -44,9 +44,9 @@ public class MainPresenter extends BasePresenter<MainView> {
     private void convert(){
         CurrencyModel.getInstance().convertCurrency(new CurrencyModel.OnConvertedListener() {
             @Override
-            public void onSuccess(@NonNull String result) {
+            public void onSuccess(@NonNull String result, @NonNull String caption1, @NonNull String caption2) {
                 if (getView() != null) {
-                    getView().showResult(result);
+                    getView().showResult(result, caption1, caption2);
                 }
             }
 
@@ -56,6 +56,7 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         }, inputData);
     }
+
 
     public void onClickConvert(@NonNull String input, int from, int to) {
         inputData.setInputCurrencyIndex(from);
