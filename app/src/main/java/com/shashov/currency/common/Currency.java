@@ -8,7 +8,7 @@ public class Currency {
     @Element(name = "NumCode")
     private String numCode;
     @Element(name = "CharCode")
-    private String CharCode;
+    private String charCode;
     @Element(name = "Nominal")
     private int nominal;
     @Element(name = "Name")
@@ -21,7 +21,7 @@ public class Currency {
 
     public Currency(String numCode, String charCode, int nominal, String name, String value) {
         this.numCode = numCode;
-        CharCode = charCode;
+        this.charCode = charCode;
         this.nominal = nominal;
         this.name = name;
         this.value = value;
@@ -36,11 +36,11 @@ public class Currency {
     }
 
     public String getCharCode() {
-        return CharCode;
+        return charCode;
     }
 
     public void setCharCode(String charCode) {
-        CharCode = charCode;
+        this.charCode = charCode;
     }
 
     public int getNominal() {
@@ -54,6 +54,7 @@ public class Currency {
     public String getName() {
         return name;
     }
+
 
     public void setName(String name) {
         this.name = name;

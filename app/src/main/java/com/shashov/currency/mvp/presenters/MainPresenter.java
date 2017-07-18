@@ -12,7 +12,7 @@ public class MainPresenter extends BasePresenter<MainView> {
     private MainViewInputData inputData;
 
     public MainPresenter() {
-        inputData = new MainViewInputData(0,0,"0");
+        inputData = CurrencyModel.getInstance().restoreInputData();
     }
 
     @Override
@@ -31,7 +31,6 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
         });
     }
-
 
     private void restoreUI(@NonNull List<Currency> currencies) {
         if (getView() != null) {
@@ -72,5 +71,10 @@ public class MainPresenter extends BasePresenter<MainView> {
         if (getView() != null) {
             getView().swapCurrencies();
         }
+    }
+
+    @Override
+    public void unbindView() {
+        CurrencyModel.getInstance().saveInputData(inputData);
     }
 }

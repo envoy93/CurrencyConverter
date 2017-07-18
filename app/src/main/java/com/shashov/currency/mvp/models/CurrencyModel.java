@@ -3,6 +3,7 @@ package com.shashov.currency.mvp.models;
 import android.annotation.SuppressLint;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.ArraySet;
 import com.shashov.currency.CurrencyConverterApp;
 import com.shashov.currency.common.Currency;
 import com.shashov.currency.common.CurrenciesXmlParser;
@@ -11,13 +12,16 @@ import com.shashov.currency.common.NetworkCall;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class CurrencyModel {
     private static final String API_URL = "http://www.cbr.ru/scripts/XML_daily.asp";
     private static final String CURRENCIES_XML_KEY = "CURRENCIES_XML_KEY";
+    private static final String INPUT_DATA_FROM = "INPUT_DATA_FROM";
+    private static final String INPUT_DATA_TO = "INPUT_DATA_TO";
+    private static final String INPUT_DATA_INPUT = "INPUT_DATA_INPUT";
     private static CurrencyModel instance;
+
     private List<Currency> currencies;
 
     public static CurrencyModel getInstance() {
@@ -123,6 +127,53 @@ public class CurrencyModel {
                 .append(" ")
                 .append(right.getCharCode())
                 .toString();
+    }
+
+    public MainViewInputData restoreInputData() {
+        String from = PreferenceManager
+                .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
+                .getString(INPUT_DATA_FROM, "USD");
+
+        String to = PreferenceManager
+                .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
+                .getString(INPUT_DATA_FROM, "USD");
+
+        String input = PreferenceManager
+                .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
+                .getString(INPUT_DATA_INPUT, "0");
+
+        Map.Entry<Integer, Integer> ind = findCurrencies(from, to);
+
+        return new MainViewInputData(ind.getKey(), ind.getValue(), input);
+    }
+
+    public void saveInputData(MainViewInputData inputData) {
+        if (inputData == null) {
+            return;
+        }
+
+        PreferenceManager
+                .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
+                .edit()
+                .putString(INPUT_DATA_FROM, currencies.get(inputData.getInputCurrencyIndex()).getCharCode())
+                .putString(INPUT_DATA_TO, currencies.get(inputData.getOutputCurrencyIndex()).getCharCode())
+                .putString(INPUT_DATA_INPUT, inputData.getInput())
+                .apply();
+    }
+
+    private Map.Entry<Integer, Integer> findCurrencies(String from, String to) {
+        int first = 0, second = 0;
+        if (currencies != null) {
+            for (int i = 0; i < currencies.size(); i++) {
+                if (currencies.get(i).getCharCode().equals(from)) {
+                    first = i;
+                }
+                if (currencies.get(i).getCharCode().equals(to)) {
+                    second = i;
+                }
+            }
+        }
+        return new AbstractMap.SimpleEntry<>(first, second);
     }
 
     public interface OnConvertedListener {

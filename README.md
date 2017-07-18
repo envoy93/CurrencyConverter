@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/envoy93/CurrencyConverter.svg?branch=master)](https://travis-ci.org/envoy93/CurrencyConverter)
+[![codecov](https://codecov.io/gh/envoy93/CurrencyConverter/branch/master/graph/badge.svg)](https://codecov.io/gh/envoy93/CurrencyConverter)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/envoy93/CurrencyConverter/master/LICENSE)
 
 # Simple Currency Converter
