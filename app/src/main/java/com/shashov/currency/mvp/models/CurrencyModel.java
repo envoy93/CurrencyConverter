@@ -1,18 +1,19 @@
 package com.shashov.currency.mvp.models;
 
-import android.annotation.SuppressLint;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.ArraySet;
 import com.shashov.currency.CurrencyConverterApp;
-import com.shashov.currency.common.Currency;
 import com.shashov.currency.common.CurrenciesXmlParser;
-import com.shashov.currency.mvp.common.MainViewInputData;
+import com.shashov.currency.common.Currency;
 import com.shashov.currency.common.NetworkCall;
+import com.shashov.currency.mvp.common.MainViewInputData;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class CurrencyModel {
     private static final String API_URL = "http://www.cbr.ru/scripts/XML_daily.asp";
@@ -69,7 +70,7 @@ public class CurrencyModel {
         }).start();
     }
 
-    private void saveXmlToCache(String xml) {
+    private void saveXmlToCache(@NonNull String xml) {
         PreferenceManager
                 .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
                 .edit()
@@ -91,8 +92,8 @@ public class CurrencyModel {
         }
     }
 
-    @SuppressLint("DefaultLocale")
     public void convertCurrency(@NonNull OnConvertedListener listener, @NonNull MainViewInputData inputData) {
+        saveInputData(inputData);
         if (inputData.getInputCurrencyIndex() >= currencies.size() || (inputData.getOutputCurrencyIndex() >= currencies.size())) {
             listener.onError();
             return;
@@ -112,18 +113,18 @@ public class CurrencyModel {
         double k2 = (to.getValue() / to.getNominal()) / (from.getValue() / from.getNominal());
         result = result * k1;
 
-        listener.onSuccess(format(result), getCaptionForCurrency(from, to, format(k1)), getCaptionForCurrency(to, from, format(k2)));
+        listener.onSuccess(format(result), getCaptionForCurrency(from, to, k1), getCaptionForCurrency(to, from, k2));
     }
 
     private String format(double number) {
-        return String.format((number == (long) number) ? "%s" : "%.3f", number);
+        return String.format(CurrencyConverterApp.getLocale(), (number == (long) number) ? "%s" : "%.3f", number);
     }
 
-    private String getCaptionForCurrency(Currency left, Currency right, String value) {
+    private String getCaptionForCurrency(@NonNull Currency left, @NonNull Currency right, double value) {
         return new StringBuilder("1 ")
                 .append(left.getCharCode())
                 .append(" = ")
-                .append(value)
+                .append(format(value))
                 .append(" ")
                 .append(right.getCharCode())
                 .toString();
@@ -136,7 +137,7 @@ public class CurrencyModel {
 
         String to = PreferenceManager
                 .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
-                .getString(INPUT_DATA_FROM, "USD");
+                .getString(INPUT_DATA_TO, "USD");
 
         String input = PreferenceManager
                 .getDefaultSharedPreferences(CurrencyConverterApp.getContext())
@@ -147,8 +148,8 @@ public class CurrencyModel {
         return new MainViewInputData(ind.getKey(), ind.getValue(), input);
     }
 
-    public void saveInputData(MainViewInputData inputData) {
-        if (inputData == null) {
+    public void saveInputData(@NonNull MainViewInputData inputData) {
+        if (inputData == null || (inputData.getInput() == null)) {
             return;
         }
 
@@ -161,7 +162,7 @@ public class CurrencyModel {
                 .apply();
     }
 
-    private Map.Entry<Integer, Integer> findCurrencies(String from, String to) {
+    private Map.Entry<Integer, Integer> findCurrencies(@NonNull String from, @NonNull String to) {
         int first = 0, second = 0;
         if (currencies != null) {
             for (int i = 0; i < currencies.size(); i++) {

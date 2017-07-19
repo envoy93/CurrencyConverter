@@ -1,6 +1,7 @@
 language: android
 jdk: oraclejdk8
 sudo: false
+dist: precise
 
 notifications:
     email:
@@ -9,7 +10,7 @@ notifications:
 env:
     matrix:
         - ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
-        - ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
+        #- ANDROID_TARGET=android-21 ANDROID_ABI=armeabi-v7a
     global:
         - ADB_INSTALL_TIMEOUT=10    #Time out to 10 mins
         - GRADLE_OPTS="-Xmx512m -XX:MaxPermSize=512m"
@@ -39,7 +40,7 @@ android:
 
         #system images
         - sys-img-armeabi-v7a-android-19
-        - sys-img-armeabi-v7a-android-21
+       # - sys-img-armeabi-v7a-android-21
 
 licenses:
     - 'android-sdk-preview-license-52d11cd2'
@@ -64,7 +65,7 @@ before_install:
     - pip install --user codecov    #Install codecov
 
 after_success:
-    - bash <(curl -s https://codecov.io/bash) -t 4d540339-e946-4766-ab40-61be12d878fa      #Run codecov
+    - bash <(curl -s https://codecov.io/bash) -t b0fb20dc-b174-426a-9c9a-2dcdf8f91c9d     #Run codecov
 
 
 after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"

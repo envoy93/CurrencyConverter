@@ -14,12 +14,12 @@ public class Currency {
     @Element(name = "Name")
     private String name;
     @Element(name = "Value")
-    private String value;
+    private Double value;
 
     public Currency() {
     }
 
-    public Currency(String numCode, String charCode, int nominal, String name, String value) {
+    public Currency(String numCode, String charCode, int nominal, String name, Double value) {
         this.numCode = numCode;
         this.charCode = charCode;
         this.nominal = nominal;
@@ -60,11 +60,11 @@ public class Currency {
         this.name = name;
     }
 
-    public double getValue() {
-        return Double.parseDouble(value.replace(",", "."));
+    public Double getValue() {
+        return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 }

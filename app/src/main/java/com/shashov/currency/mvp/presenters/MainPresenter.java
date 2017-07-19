@@ -72,9 +72,4 @@ public class MainPresenter extends BasePresenter<MainView> {
             getView().swapCurrencies();
         }
     }
-
-    @Override
-    public void unbindView() {
-        CurrencyModel.getInstance().saveInputData(inputData);
-    }
 }
